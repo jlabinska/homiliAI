@@ -30,8 +30,8 @@ public class Gospel {
   @Column(nullable = false, unique = true)
   private LocalDate date;
 
-  @Column(name = "gospel_text", nullable = false, columnDefinition = "TEXT")
-  private String gospelText;
+  @Column(name = "gospel_siglum", nullable = false, length = 50)
+  private String gospelSiglum;
 
   @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
   private LocalDateTime createdAt;
