@@ -3,10 +3,27 @@ spring:
     url: jdbc:mysql://localhost:3306/homiliAI_db
     username: root
     password: coderslab
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: update
-    show-sql: true
     properties:
       hibernate:
+        format_sql: true
+        use_sql_comments: true
         dialect: org.hibernate.dialect.MySQLDialect
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG

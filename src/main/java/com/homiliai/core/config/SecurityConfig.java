@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -37,11 +36,11 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .authorizeHttpRequests(authz -> authz
-            .requestMatchers("/register", "/login").permitAll()
+            .requestMatchers("/auth/register", "/auth/login", "/error").permitAll()
             .anyRequest().authenticated()
         )
         .formLogin(form -> form
-            .loginPage("/login")
+            .loginPage("/auth/login")
             .permitAll()
         )
         .logout(LogoutConfigurer::permitAll);

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="EN">
+<head>
+  <meta charset="UTF-8">
+  <title>Register</title>
+</head>
+<body>
+
+<h2>Register</h2>
+
+<!-- Display the error message if email/username exists -->
+<div th:if="${errorMessage != null}" style="color:red;">
+  <p th:text="${errorMessage}"></p>
+</div>
+
+<form th:action="@{/auth/register}" th:object="${user}" method="post">
+
+  <!-- Registration form fields -->
+  <h3>Personal Details</h3>
+
+  <label>First Name: </label>
+  <input type="text" th:field="*{firstName}" required/><br/>
+
+  <label>Last Name: </label>
+  <input type="text" th:field="*{lastName}" required/><br/>
+
+  <label>Email: </label>
+  <input type="email" th:field="*{email}" required/><br/>
+
+  <label>Username: </label>
+  <input type="text" th:field="*{username}" required /><br/>
+
+  <label>Password: </label>
+  <input type="password" th:field="*{password}" required/><br/>
+
+  <h3>Parish Details (Optional)</h3>
+
+  <div th:object="${parish}">
+    <label>Parish Name: </label>
+    <input type="text" th:field="*{name}"/><br/>
+
+    <label>Parish Location: </label>
+    <input type="text" th:field="*{location}"/><br/>
+
+    <label>Parish Size (number of parishioners): </label>
+    <input type="number" th:field="*{size}" min="0" /><br/>
+
+    <label>Average Age of Parishioners: </label>
+    <input type="number" th:field="*{averageAge}" min="0" /><br/>
+
+    <label>Parish Description: </label>
+    <textarea th:field="*{description}"></textarea><br/>
+  </div>
+
+  <button type="submit">Register</button>
+</form>
+
+</body>
+</html>

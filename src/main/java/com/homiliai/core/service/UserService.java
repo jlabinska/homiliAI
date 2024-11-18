@@ -5,12 +5,16 @@ import com.homiliai.core.entity.User;
 import com.homiliai.core.repository.ParishRepository;
 import com.homiliai.core.repository.UserRepository;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
+
+  private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
   private final UserRepository userRepository;
   private final ParishRepository parishRepository;
@@ -24,16 +28,33 @@ public class UserService {
     this.passwordEncoder = passwordEncoder;
   }
 
-  public User registerUser(User user, Parish parish) {
+  public String registerUser(User user, Parish parish) {
+    // check if a user with the same email already exists
+    Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
+    if (existingUser.isPresent()) {
+      logger.info("User with email {} already exists.", user.getEmail());
+      throw new IllegalArgumentException("User with this email already exists.");
+    }
+
+    // check if a user with the same username already exists
+    Optional<User> existingUser2 = userRepository.findByUsername(user.getUsername());
+    if (existingUser2.isPresent()) {
+      logger.info("User with username {} already exists.", user.getUsername());
+      throw new IllegalArgumentException("User with this username already exists.");
+    }
+
     user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-    // Jeśli podano szczegóły parafii, zapisz parafię i powiąż ją z użytkownikiem
-    if (parish != null) {
+    // if parish details are provided save parish and associate it with the user
+    if (parish != null && parish.getName() != null && !parish.getName().isEmpty()) {
+      logger.info("Saving parish: {}", parish);
       Parish savedParish = parishRepository.save(parish);
       user.setParish(savedParish);
     }
 
-    return userRepository.save(user);
+    logger.info("Saving user: {}", user);
+    userRepository.save(user);
+    return "User registered successfully";
   }
 
   public Optional<User> findByEmail(String email) {

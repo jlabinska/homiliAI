@@ -9,9 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/auth")
 public class AuthController {
+
   private final UserService userService;
 
   @Autowired
@@ -27,17 +30,28 @@ public class AuthController {
   }
 
   @PostMapping("/register")
-  public String registerUser(@ModelAttribute User user, @ModelAttribute Parish parish) {
-    if (parish.getName() == null || parish.getName().isEmpty()) {
-      parish = null; // Opcjonalne, jeśli użytkownik nie poda szczegółów parafii
+  public String registerUser(@ModelAttribute User user, @ModelAttribute Parish parish,
+      Model model) {
+    try {
+      // Register the user, handling optional Parish
+      userService.registerUser(user,
+          (parish.getName() == null || parish.getName().isEmpty()) ? null : parish);
+      return "redirect:/auth/login"; // Redirect to login on successful registration
+
+    } catch (IllegalArgumentException ex) {
+      // Add error message to the model in case of an exception
+      model.addAttribute("errorMessage", ex.getMessage());
+      model.addAttribute("user", user); // Preserve entered data
+      model.addAttribute("parish", parish); // Preserve entered parish data
+      return "register"; // Return to the registration form with the error message
     }
-    userService.registerUser(user, parish);
-    return "redirect:/login";
   }
 
   @GetMapping("/login")
-  public String showLoginForm() {
-    return "login";
+  public String showLoginForm(Model model) {
+    model.addAttribute("user", new User());
+    return "login"; // simply returns the "login.html" view
   }
+
 
 }
