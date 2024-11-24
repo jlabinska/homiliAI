@@ -11,11 +11,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.FetchProfile.FetchOverride;
 
 @Entity
 @Table(name = "sermons")
@@ -32,8 +32,11 @@ public class Sermon {
   @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "FK_USER_ID"))
   private User user;
 
+  @Column(nullable = false)
+  private LocalDate sermonDate; // For storing the selected date
+
   @ManyToOne
-  @JoinColumn(name = "gospel_id", foreignKey = @ForeignKey(name = "FK_GOSPLE_ID"))
+  @JoinColumn(name = "gospel_id", foreignKey = @ForeignKey(name = "FK_GOSPEL_ID"))
   private Gospel gospel;
 
   @ManyToOne
@@ -50,6 +53,12 @@ public class Sermon {
     ADULTS,
     MARRIED
   }
+
+  @Column(columnDefinition = "TEXT")
+  private String gospelText; // Fetched Gospel text
+
+  @Column(columnDefinition = "TEXT")
+  private String content; // Sermon content
 
   @Column(name = "google_docs_url", nullable = false, length = 255)
   private String googleDocsUrl;

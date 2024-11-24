@@ -1,6 +1,5 @@
 package com.homiliai.core.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,7 +26,7 @@ public class Occasion {
   private Long id;
 
   @Column(nullable = false)
-  private String name;
+  private String name; // "Sunday Mass", "Easter"
 
   @Column(columnDefinition = "TEXT")
   private String description;
