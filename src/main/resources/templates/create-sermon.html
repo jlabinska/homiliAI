@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="EN">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Sermon</title>
+</head>
+<body>
+<form action="#" th:action="@{/create-sermon}" th:object="${createSermonDTO}" method="post">
+  <label for="sermonDate">Select the date for the sermon:</label>
+  <input type="date" id="sermonDate" th:field="*{sermonDate}" required/>
+  <br/>
+
+  <label for="audience">Select the sermon audience:</label>
+  <select id="audience" th:field="*{audience}" required>
+    <option value="ADULTS">Adults</option>
+    <option value="CHILDREN">Children</option>
+    <option value="YOUTH">Youth</option>
+    <option value="MARRIED">Married couples</option>
+  </select>
+  <br/>
+
+  <label for="occasion">Select the type of occasion:</label>
+  <select id="occasion" th:field="*{occasionId}" required>
+    <option th:each="occasion : ${occasions}" th:value="${occasion.id}"
+            th:text="${occasion.name}"></option>
+  </select>
+  <br/>
+
+  <label for="content">Sermon Content:</label>
+  <textarea id="content" th:field="*{content}" required></textarea>
+  <br/>
+
+  <button type="submit">Generate Sermon</button>
+</form>
+</body>
+</html>
